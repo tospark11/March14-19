@@ -1,0 +1,50 @@
+CREATE TABLE tutorials_tbl(tutorial_id INT NOT NULL AUTO_INCREMENT,tutorial_title VARCHAR(100) NOT NULL,tutorial_author VARCHAR(40) NOT NULL,submission_date DATE,
+    PRIMARY KEY ( tutorial_id ));
+
+
+
+sqoop command:--
+
+sqoop import --jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl
+
+sqoop import --connect jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/
+
+sqoop import --connect jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/temp --where tutorial_id=1004
+
+sqoop import --connect jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/tem0p --where "tutorial_id between 1001 and 1006"
+
+sqoop import --connect jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/tem2p --where "tutorial_id between 1001 and 1006" --fields-terminated-by='|'
+
+sqoop import --connect jdbc:mysql://localhost/hanuman --username root --password tiger --table tutorials_tbl --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/tem3p --where "tutorial_id between 1001 and 1006" --fields-terminated-by='|' --columns=tutorial_id,submission_date
+
+sqoop import-all-tables --connect jdbc:mysql://localhost/hanuman --username root --password tiger  --m 1 --warehouse-dir /user/cloudera/sqoopwarehouse/totaldb
+
+sqoop import-all-tables --connect jdbc:mysql://localhost/hanuman --username root --password tiger  --m 1 --hive-import
+=================
+hive
+===========
+CREATE HEAD FamilyHead(
+name String,
+business_places Array<String>,
+sex_age STRUCT<sex:String,age:int>
+fathername_noofchildes MAP<String,int>)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '|',
+COLLECTION ITEMS TERMINATED BY ',',
+map keys terminated by ',';
+
+create database with comments,location and with db properties
+create database if not exists hanuman comment "this is database for storing all files" LOCATION '/hdfs/location/' WITH DBPROPERTIES('database_creator'='vedic');
+
+create table if not exists family(name string,values array<string>,sex_age STRUCT<sex:string,age:int>,keys MAP<String ,int> ) row format delimited fields terminated by',';
+
+insert into sample_07 values(1c,clustpost,11000,1000);
+
+hive> create table family.family_07 as select * from sample_07;
+
+create table family.family_08 as with dataset1 as (select * from sample_07),dataset2 as( select * from sample_08) select * from dataset1 union all select * from dataset2;
+
+chech all command in hdfs=  hdfs dfs
+make a directory         =  hdfs dfs -mkdir /user/cloudera/employee;
+crate empty file         =  hadoop fs -touchz /user/cloudera/employee/quicktechie.txt
+put                      = hdfs dfs -put -f  /home/cloudera/Desktop/test/hadoopexam.txt  /user/cloudera/employee
+hdfs dfs -cat /user/cloudera/tutorials_tbl/part*
